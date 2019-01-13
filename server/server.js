@@ -10,12 +10,12 @@ const app = express()
 
 app.use('/public', express.static(path.join(__dirname, '../dist')))
 
-app.get('*', funrtion (req, res) {
+app.get('*', function (req, res) {
 	const appString = ReactSSR.renderToString(serverEntry)
-	
-	res.send(template.replace('<app></app>'))
+
+	res.send(template.replace(('<!-- app -->')))
 })
 
-app.listen(3333, function() {
+app.listen(3333, function () {
 	console.log('server is listening on 3333')
 })

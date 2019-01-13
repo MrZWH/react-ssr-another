@@ -6,6 +6,7 @@
   "scripts": {
     "build:client": "webpack --config build/webpack.config.client.js",
     "build:server": "webpack --config build/webpack.config.server.js",
+    "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
     "clear": "rimraf dist",
     "start": "node server/server.js",
     "build": "npm run clear && npm run build:client && npm run build:server"
@@ -15,7 +16,7 @@
   "dependencies": {
   	"express": "4.16.1",
   	"react": "16.0.0",
-  	"react-dom": "16.0.0",
+  	"react-dom": "16.0.0"
   },
   "devDependencies": {
   	"babel-core": "6.26.0",
@@ -25,6 +26,6 @@
   	"babel-preset-react": "6.24.1",
   	"babel-preset-stage-1": "6.24.1",
   	"html-webpack-plugin": "2.30.1",
-  	"rimraf": "2.6.2",
-  },
+  	"rimraf": "2.6.2"
+  }
 }
