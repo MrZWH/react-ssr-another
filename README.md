@@ -84,5 +84,12 @@ npm i webpack-dev-server -D
 npm i cross-env -D  
 cross-env 用于设置 NODE_ENV 环境变量，兼容 windows mac
 
-.babelrc 文件配置
+.babelrc 文件配置  
 npm i react-hot-loader@next -D
+
+```
+npm i axios -S  
+npm i memory-fs -D  
+npm i http-proxy-middleware -D
+```
+在 webpack-dev-server 启动的时候 template.html 不写到硬盘上，需要发送一个请求到 dev server 启动的服务上获取文件，详细见`server/util/dev-static.js`
