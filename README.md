@@ -93,3 +93,27 @@ npm i memory-fs -D
 npm i http-proxy-middleware -D
 ```
 在 webpack-dev-server 启动的时候 template.html 不写到硬盘上，需要发送一个请求到 dev server 启动的服务上获取文件，详细见`server/util/dev-static.js`
+
+## 使用 eslint 和 editorconfig 规范代码
+### 为什么要用这些
+- 规范代码有利于团队协作
+- 纯手工规范费时费力而且不能保证准确性
+- 能配合编辑器自动提醒错误，提高开发效率
+
+### eslint
+随着 ECMAScript 版本一致更新的 Js lint 工具，插件丰富并且能够套用规范，规则非常丰富，能够满足大部分团队的需求。
+
+### eslint 配合 git
+为了最大程度控制每个人的规范，我们可以在 git commit 代码的时候，使用 git hook 调用 eslint 进行代码规范验证，不规范的代码无法提交到仓库。
+
+### editorconfig
+不同编辑器对文本的格式会有一定的区别，如果不统一一些规范，可能你跟别人合作的时候每次更新别人的代码下来就有一大堆的报错。
+
+```
+npm i eslint babel-eslint eslint-config-airbnb eslint-config-standard eslint-loader eslint-plugin-import eslint-plugin-jsx-ally eslint-plugin-node eslint-plugin-react eslint-plugin-promise eslint-plugin-standard -D
+```
+// eslint-disable-line
+```
+npm i husky -D
+```
+husky 会在执行`git commit`的时候执行 script 脚本里的的 `precommit`

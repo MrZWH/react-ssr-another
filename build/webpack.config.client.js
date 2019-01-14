@@ -17,6 +17,14 @@ const config = {
 	module: {
 		rules: [
 			{
+				enforce: 'pre', // 代码编译之前检查
+				test: /.(js|jsx)$/,
+				loader: 'eslint-loader',
+				exclude: [
+					path.join(__dirname, '../node_modules')
+				]
+			},
+			{
 				test: /.jsx$/,
 				loader: 'babel-loader'
 			},
