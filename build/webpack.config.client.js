@@ -1,5 +1,6 @@
 const path = require('path')
 const HTMLPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -11,7 +12,7 @@ const config = {
 	output: {
 		filename: '[name].[hash].js',
 		path: path.join(__dirname, '../dist'),
-		publicPath: '/public', // 用以区分静态文件
+		publicPath: '/public/', // 用以区分静态文件
 	},
 	module: {
 		rules: [
@@ -36,6 +37,13 @@ const config = {
 }
 
 if (isDev) {
+	config.entry = {
+		app: [
+			'react-hot-loader/patch',
+			path.join(__dirname, '../client/app.js')
+		]
+	}
+
 	config.devServer = {
 		host: '0.0.0.0',
 		port: '8888',
@@ -49,6 +57,8 @@ if (isDev) {
 			index: '/public/index.html' // 访问所有不存在页面都返回 index 页面
 		}
 	}
+
+	config.plugins.push(new webpack.HotModuleReplacementPlugin())
 }
 
 module.exports = config

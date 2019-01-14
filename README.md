@@ -81,5 +81,8 @@ create client/template.html
 
 npm i webpack-dev-server -D
 
-npm i cross-env -D
+npm i cross-env -D  
 cross-env 用于设置 NODE_ENV 环境变量，兼容 windows mac
+
+.babelrc 文件配置
+npm i react-hot-loader@next -D
