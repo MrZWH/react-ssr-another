@@ -81,15 +81,15 @@ create client/template.html
 
 npm i webpack-dev-server -D
 
-npm i cross-env -D  
+npm i cross-env -D
 cross-env 用于设置 NODE_ENV 环境变量，兼容 windows mac
 
-.babelrc 文件配置  
+.babelrc 文件配置
 npm i react-hot-loader@next -D
 
 ```
-npm i axios -S  
-npm i memory-fs -D  
+npm i axios -S
+npm i memory-fs -D
 npm i http-proxy-middleware -D
 ```
 在 webpack-dev-server 启动的时候 template.html 不写到硬盘上，需要发送一个请求到 dev server 启动的服务上获取文件，详细见`server/util/dev-static.js`
@@ -117,3 +117,49 @@ npm i eslint babel-eslint eslint-config-airbnb eslint-config-standard eslint-loa
 npm i husky -D
 ```
 husky 会在执行`git commit`的时候执行 script 脚本里的的 `precommit`
+
+## 工程架构优化
+合并 webpack 配置
+```
+npm i webpack-merge -D
+```
+
+由于，网页上请求 `favicon.ico`没有该文件会返回 html
+```
+// express 的插件
+npm i serve-favicon -S
+```
+
+服务端渲染时文件改动了自动重启服务：
+```
+npm i nodemon -D
+```
+在编写配置文件`nodemon.json`
+其中 verbose 表示输出详细信息
+修改启动命令 script
+一定要配置 "restartable": "rs"
+
+## 项目架构
+
+### 项目基本目录结构
+- views
+  - 用于存放项目功能模块的页面，需要根据路由配置情况分割子级目录。
+- config
+  - 存放一些配置目录，比如第三方类库引用，路由配置等
+- store
+  - 存放项目 store 相关的文件，包括数据获取的封装
+- components
+  - 存放非业务组件，或者在多个业务间都需要用到的功能组件。
+
+### 路由配置
+#### 什么是前端路由
+路由是用来区分一个网站不同功能模块的地址，浏览器通过访问同一站点下的不同路由，来访问网站不同功能，同样路由也让开发者区分返回的内容。
+
+#### 如何做前端路由
+HTML5 API 中的 history 能够让我们控制 url 跳转后不刷新页面，而是交给我们的 JS 代码进行相应操作。在 history api 出现之前，我们可以使用 hash 跳转来实现。
+
+#### react 中的路由
+react-router 是一个非常好用的路由控制插件，能够让我们像书写 JSX 组件一样控制路由的跳转。
+```
+npm i react-router-dom -S
+```

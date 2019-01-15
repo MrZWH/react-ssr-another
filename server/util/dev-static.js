@@ -21,7 +21,7 @@ const Module = module.constructor
 
 const mfs = new MemoryFs
 // serverCompiler 可以监听 entry 下面依赖的文件是否有变化，一旦发生变化会重新去打包
-const serverCompiler = webpack(serverConfig) 
+const serverCompiler = webpack(serverConfig)
 serverCompiler.outputFileSystem = mfs
 let serverBundle
 serverCompiler.watch({}, (err, stats) => {
