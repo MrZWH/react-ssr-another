@@ -115,6 +115,11 @@ npm i eslint babel-eslint eslint-config-airbnb eslint-config-standard eslint-loa
 
 禁止 eslint 检查：
 // eslint-disable-line   单行
+```
+/* eslint-disable */
+...
+/* eslint-enable */
+```
 
 
 ```
@@ -203,3 +208,25 @@ npm i prop-types -S
 npm i body-parser express-session query-string -S
 ```
 body-parser 是用来转化 request body 的，转化成 json 数据以便于后期使用。
+
+### 服务端渲染优化
+
+#### 路由跳转
+使用者可能从任意路由进入我们的网站，所以在服务端中也必须处理路由跳转，在返回给客户端的时候就是指定页面。
+
+#### store 数据同步
+每个页面会有对应的数据，在服务端渲染时已经请求过对应数据，所以要让客户端知道这些数据，在客户端渲染的时候直接使用，而不是通过 API 再次请求，造成浪费。
+
+使腹短渲染时可以让组件发送异步请求并拿到数据：
+```
+npm i react-async-bootstrapper -S
+```
+
+```
+npm i ejs-compiled-loader ejs -S
+```
+
+序列化 JavaScript object：
+```
+npm i serialize-javascript -S
+```
