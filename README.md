@@ -163,3 +163,32 @@ react-router 是一个非常好用的路由控制插件，能够让我们像书�
 ```
 npm i react-router-dom -S
 ```
+### 什么是 store
+伴随 React 一起诞生的，是 Facebook 推出的一套前端数据流方案，叫做 flux，在其数据存储的地方，就叫 store，flux 又叫做单项数据流
+
+#### Mobx
+Mobx 是 flux 实现的后起之秀，其以更简单的使用和更少的概念，让 flux 使用起来变得更加简单。相比于 Redux 有 mutation、action、dispatch 等概念，Mobx 则更符合一个对 store 增删改查的操作概念
+
+安装 mobx：
+```
+npm i mobx mobx-react -S
+```
+
+配置环境使用装饰器写法：
+```
+npm i babel-preset-stage-1 babel-plugins-transform-decorations-legacy -D
+```
+`.babelrc`
+```
+{
+  "presets": [
+    "stage-1",
+  ],
+  "plugins": ["transform-decorations-legacy"] //必须放在第一位
+}
+```
+
+安装 react 组件 props 类型的工具：
+```
+npm i prop-types -S
+```
