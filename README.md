@@ -192,3 +192,10 @@ npm i babel-preset-stage-1 babel-plugins-transform-decorations-legacy -D
 ```
 npm i prop-types -S
 ```
+
+### CNode API 代理实现
+安装依赖：
+```
+npm i body-parser express-session query-string -S
+```
+body-parser 是用来转化 request body 的，转化成 json 数据以便于后期使用。
