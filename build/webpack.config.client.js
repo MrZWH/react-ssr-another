@@ -40,7 +40,10 @@ if (isDev) {
 		publicPath: '/public/',
 		historyApiFallback: {
 			index: '/public/index.html' // 访问所有不存在页面都返回 index 页面
-		}
+		},
+    proxy: {
+      '/api': 'http://localhost:3333'
+    }
 	}
 
 	config.plugins.push(new webpack.HotModuleReplacementPlugin())

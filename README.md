@@ -112,7 +112,11 @@ npm i http-proxy-middleware -D
 ```
 npm i eslint babel-eslint eslint-config-airbnb eslint-config-standard eslint-loader eslint-plugin-import eslint-plugin-jsx-ally eslint-plugin-node eslint-plugin-react eslint-plugin-promise eslint-plugin-standard -D
 ```
-// eslint-disable-line
+
+禁止 eslint 检查：
+// eslint-disable-line   单行
+
+
 ```
 npm i husky -D
 ```
