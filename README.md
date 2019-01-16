@@ -230,3 +230,8 @@ npm i ejs-compiled-loader ejs -S
 ```
 npm i serialize-javascript -S
 ```
+
+SEO 时需要给不同路由不同的 页面title、description
+```
+npm i react-helmet -S
+```

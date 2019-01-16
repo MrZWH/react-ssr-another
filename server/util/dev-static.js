@@ -7,6 +7,7 @@ const ReactDomServer = require('react-dom/server')
 const asyncBootstrapper = require('react-async-bootstrapper').default
 const ejs = require('ejs')
 const serialize = require('serialize-javascript')
+const Helmet = require('react-helmet').default
 
 const serverConfig = require('../../build/webpack.config.server')
 
@@ -20,7 +21,22 @@ const getTemplate = () => {
   })
 }
 
-const Module = module.constructor
+const NativeModule = require('module')
+const vm = require('vm')
+
+const getModuleFromString = (bundle, filename) {
+  const m = {
+    exports: {}
+  }
+  const wrapper = NativeModule.wrap(bundle)
+  const script = new vm.Script(wrapper, {
+    filename: filename,
+    displayErrors: true
+  })
+  const result = script.runInThisContext
+  result.call(m.exports, m.exports, require, m)
+  return m
+}
 
 const mfs = new MemoryFs
 // serverCompiler 可以监听 entry 下面依赖的文件是否有变化，一旦发生变化会重新去打包
@@ -42,8 +58,7 @@ serverCompiler.watch({}, (err, stats) => {
   // 拿到的是 string 内容，在 js 模块不可用
   const bundle = mfs.readFileSync(bundlePath, 'utf-8')
 
-  const m = new Module()
-  m._compile(bundle, 'server-entry.js')
+  const m = getModuleFromString(bundle, 'server-entry.js')
   serverBundle = m.exports.default
   createStoreMap = m.exports.createStoreMap
 })
@@ -75,12 +90,16 @@ module.exports = (app) => {
           res.end()
           return
         }
-
+        const helmet = Helmet.rewind()
         const state = getStoreState(stores)
 
         const html = ejs.render(template, {
           appString: content,
-          initialState: serialize(state)
+          initialState: serialize(state),
+          meta: helmet.meta.toString(),
+          title: helmet.title.toString(),
+          style: helmet.style.toString(),
+          link: helmet.link.toString()
         })
         res.send(html)
         // res.send(template.replace(('<!-- app -->'), content))
