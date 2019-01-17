@@ -235,3 +235,16 @@ SEO 时需要给不同路由不同的 页面title、description
 ```
 npm i react-helmet -S
 ```
+
+## React 16
+
+### 更新了什么
+首先，它小了，react + react-dom 在 gzipped 后小了 10k（生产环境使用了 rollup 进行打包）左右。其次，它整个代码都用 Fiber 重写了。最后，它更新了一堆非常有用的功能。
+
+### 新特性
+- error boundary
+  - componentDidCatch(error, errorInfo)
+- New render return types
+- Portals
+  - `render(){return ReactDOM.createPortal(this.props.children, domNode)}`
+- Better server-side rendering
