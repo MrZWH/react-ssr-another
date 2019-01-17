@@ -5,6 +5,7 @@ import {
 } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
+import Button from 'material-ui/Button'
 
 @inject('appState') @observer
 export default class TopicList extends React.Component {

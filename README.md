@@ -248,3 +248,14 @@ npm i react-helmet -S
 - Portals
   - `render(){return ReactDOM.createPortal(this.props.children, domNode)}`
 - Better server-side rendering
+
+## 开发社区项目
+www.material-ui.com
+```
+npm i material-ui@next material-ui-icons -S
+```
+
+使 material-ui 样式应用在服务端渲染中需要安装以下包：
+```
+npm i react-jss jss jss-preset-default -S
+```
