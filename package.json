@@ -11,12 +11,15 @@
     "clear": "rimraf dist",
     "lint": "eslint --ext .js --ext .jsx client/",
     "precommit": "npm run lint",
-    "build": "npm run clear && npm run build:client && npm run build:server"
+    "build": "npm run clear && npm run build:client && npm run build:server",
+    "start": "cross-env NODE_ENV=production node server/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "0.16.2",
+    "body-parser": "1.10.2",
+    "ejs": "2.5.7",
   	"express": "4.16.1",
   	"react": "16.0.0",
   	"react-dom": "16.0.0"
