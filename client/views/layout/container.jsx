@@ -11,11 +11,11 @@ const styles = {
   },
 }
 
-const Container = ({classes, children}) => {
+const Container = ({classes, children}) => (
   <Paper elevation={4} className={classes.root}>
     {children}
   </Paper>
-}
+)
 
 Container.proptypes = {
   classes: PropTypes.object.isRequired,
