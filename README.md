@@ -263,3 +263,13 @@ npm i react-jss jss jss-preset-default -S
 ```
 npm i classnames -S
 ```
+
+把 markdown 的内容转换为 html 能显示的内容：
+```
+npm i marked -S
+```
+
+格式化想要的时间格式：
+```
+npm i dateformat -S
+```

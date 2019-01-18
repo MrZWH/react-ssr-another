@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes form 'prop-types'
+import dateFormat from 'dateformat'
 import cx from 'classnames'
 
 import ListItem from 'material-ui/List/ListItem'
@@ -44,7 +45,7 @@ const Secondary = ({classes, topic}) => (
       <span>/</span>
       <span>{topic.visit_count}</span>
     </span>
-    <span>创建时间{topic.create_at}</span>
+    <span>创建时间: {dateFormat(topic.create_at, 'yy年mm月dd日')}</span>
   </span>
 )
 
