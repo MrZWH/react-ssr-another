@@ -259,3 +259,7 @@ npm i material-ui@next material-ui-icons -S
 ```
 npm i react-jss jss jss-preset-default -S
 ```
+
+```
+npm i classnames -S
+```
