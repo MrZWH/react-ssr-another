@@ -28,15 +28,15 @@ Primary.propTypes = {
 }
 
 const Secondary = ({classes, topic}) => (
-  <div className={classes.root}>
-    <span className={classes.username}>{topic.username}</span>
+  <span className={classes.root}>
+    <span className={classes.username}>{topic.author.loginname}</span>
     <span className={classes.count}>
       <span className={classes.accentColor}>{topic.reply_count}</span>
       <span>/</span>
       <span>{topic.visit_count}</span>
     </span>
     <span>创建时间{topic.create_at}</span>
-  </div>
+  </span>
 )
 
 Secondary.propTypes = {
@@ -47,7 +47,7 @@ Secondary.propTypes = {
 const TopicListItem = ({onClick, topic}) => (
   <ListItem button onClick={onClick}>
     <ListItemAvatar>
-      <Avatar src={topic.image}/>
+      <Avatar src={topic.author.avatar_url}/>
     </ListItemAvatar>
     <ListItemText
       primary={<StyledPrimary topic={topic} />}
