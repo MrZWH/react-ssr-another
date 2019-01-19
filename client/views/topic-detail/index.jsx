@@ -11,6 +11,10 @@ import {withStyles} from 'material-ui/styles'
 import Paper from 'material-ui/Paper'
 import {CircularProgress} from 'material-ui/Progress'
 
+import Button from 'material-ui/Button'
+
+import SimpleMDE from 'react-simplemde-editor'
+
 import Container from '../layout/containers'
 
 import {topicDetailStyle} from './styles'
@@ -20,9 +24,17 @@ import Reply form './reply'
 @inject((stores) => {
   return {
     topicStore: stores.topicStore,
+    user: stores.appState.user,
   }
 }) @observer
 class TopicDetail extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      newReply: ''
+    }
+    this.handleNewReplyChange = this.handleNewReplyChange.bind(this)
+  }
   componentDidMount() {
     const id = this.getTopicId()
     this.props.topicStore.getTopicDetail(id)
@@ -32,9 +44,16 @@ class TopicDetail extends React.Component {
     return this.props.match.params.id
   }
 
+  handleNewReplyChange(value) {
+    this.state({
+      newReply: value
+    })
+  }
+
   render() {
     const {
       classes,
+      user,
     } = this.props
     const id = this.getTopicId()
     const topic = this.props.topicStore.detailMap[id]
@@ -66,6 +85,27 @@ class TopicDetail extends React.Component {
             <span>{`${topic.reply_count} 回复`}</span>
             <span>{`最新回复 ${topic.last_reply_at}`}</span>
           </header>
+            {
+              user.isLogin ?
+              <section className="replyEditor"><SimpleMDE
+              onChange={this.handleNewReplyChange}
+              value={this.state.newReply}
+              options={{
+                toolbar: false,
+                autoFocus: false,
+                spellChecker: false,
+                placeholder: '添加您的精彩回复'
+              }}
+            /></section> : null
+            }
+            {
+              !user.isLogin ?
+                <section>
+                  <Button raised color="accent" onClick={this.goToLogin}>
+                    登录并进行回复
+                  </Button>
+                </section>
+            }
           <section>
             {
               topic.replies.map(reply => <Reply reply={reply} key={reply.id} />)
@@ -79,6 +119,7 @@ class TopicDetail extends React.Component {
 
 TopicDetail.wrappedComponent.propTypes = {
   topicStore: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 TopicDetail.propTypes = {

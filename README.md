@@ -273,3 +273,19 @@ npm i marked -S
 ```
 npm i dateformat -S
 ```
+
+支持书写 markdown 语法的 插件:
+```
+npm i react-simplemad-editor -S
+```
+
+### 正式环境打包优化
+
+```
+npm i name-all-modules-plugin -D
+```
+
+### 部署到 CDN
+```
+npm i qiniu -D
+```

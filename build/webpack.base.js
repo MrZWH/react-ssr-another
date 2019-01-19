@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   output: {
     path: path.join(__dirname, '../dist'),
-    publicPath: '/public/', // 用以区分静态文件
+    publicPath: '/public/'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -11,11 +11,11 @@ module.exports = {
   module: {
     rules: [
       {
-        enforce: 'pre', // 代码编译之前检查
+        enforce: 'pre',
         test: /.(js|jsx)$/,
         loader: 'eslint-loader',
         exclude: [
-          path.join(__dirname, '../node_modules')
+          path.resolve(__dirname, '../node_modules')
         ]
       },
       {

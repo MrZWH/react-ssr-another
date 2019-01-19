@@ -24,7 +24,10 @@ class User extends React.Component {
   }
 
   render() {
-    const classes = this.props.classes
+    const {
+      classes,
+    } = this.props
+
     const user = this.props.user.info || {}
     return (
       <Container>
