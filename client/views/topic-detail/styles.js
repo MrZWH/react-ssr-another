@@ -3,7 +3,7 @@ export const topicDetailStyle = (theme) => {
     header: {
       padding: 20,
       borderBottom: '1px solid #dfdfdf',
-      '& h3'： {
+      '& h3': {
         margin: 0,
       },
     },
@@ -48,9 +48,29 @@ export const topicDetailStyle = (theme) => {
       padding: 24,
       borderBottom: '1px solid #dfdfdf',
       '& .CodeMirror': {
-
-      }
-    }
+        height: 150,
+        minHeight: 'auto',
+        '& .CodeMirror-scroll': {
+          minHeight: 'auto',
+        },
+      },
+    },
+    replyButton: {
+      position: 'absolute',
+      right: 40,
+      bottom: 65,
+      zIndex: 101,
+      opacity: 0.1,
+      transition: 'opacity .3s',
+      '&:hover': {
+        opacity: 1,
+      },
+    },
+    loadingContainer: {
+      padding: 40,
+      display: 'flex',
+      justifyContent: 'space-around',
+    },
   }
 }
 
@@ -61,7 +81,7 @@ export const replyStyle = {
     padding: 20,
     paddingBottom: 0,
     borderBottom: '1px solid #dfdfdf',
-  }.
+  },
   left: {
     marginRight: 20,
   },
@@ -69,6 +89,6 @@ export const replyStyle = {
     '& img': {
       maxWidth: '100%',
       display: 'block',
-    }
-  }
+    },
+  },
 }
