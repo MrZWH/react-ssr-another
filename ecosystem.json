@@ -12,8 +12,8 @@
   "deploy": {
     "production": {
       "user": "root",
-      "host": "jokcy.me",
-      "repo": "git@gitee.com:jokcylou/react-cnode-tech.git",
+      "host": "yourhost",
+      "repo": "git@gitee.com:your/react-cnode-tech.git",
       "ref": "origin/master",
       "path": "/root/deploy/jnode-master",
       "post-deploy": "npm install && npm run deploy && pm2 startOrRestart ecosystem.json --env production"
