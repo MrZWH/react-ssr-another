@@ -53,12 +53,6 @@ class UserLogin extends React.Component {
       })
   }
 
-  componentWillMount() {
-    if (this.props.user.isLogin) {
-      this.context.router.history.replace('/user/info')
-    }
-  }
-
   handleInput(event) {
     this.setState({
       accesstoken: event.target.value.trim(),

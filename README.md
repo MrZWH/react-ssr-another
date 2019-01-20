@@ -289,3 +289,81 @@ npm i name-all-modules-plugin -D
 ```
 npm i qiniu -D
 ```
+
+### 修复第三方组件带来的问题
+使用第三方 react 组件的时候，有可能第三方组件使用的 react 版本与你用的不一致，导致打包的时候会打包两个版本的 react
+
+### 服务器部署流程
+PM2：收集日志、重启服务...
+```
+npm i pm2 -g
+```
+根目录下创建配置文件：`process.yml`
+
+启动：命令行输入`pm2 start process.yml`
+查看日志：`pm2 logs`
+
+先生成 ssh 的 key：`ssh-keygen.exe`,生成的密钥会存放在`ls ~/.ssh/`,`id_rsa`、`id_rsa.pub`就是密钥对
+购买服务器，通过`ssh`去连接服务:`ssh root@jokcy.me`
+
+连接到服务器后先安装 nginx：
+  - 如果是 ubuntu：`apt-get install nginx`
+  - centos: `yum install nginx`
+然后安装 node 环境
+
+nginx 所在目录: `cd /etc/nginx`，其配置文件`nginx.conf`,你可以在`cd conf.d/`目录下创建你自己的配置文件。
+```
+upstream jnode {
+  server 127.0.0.1:3333;
+  keepalive 64
+}
+server {
+  listen 80;
+  server_name jnode.jokcy.me;
+
+  location / {
+    root /root/projects/react-cnode-teach;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Nginx-Proxy true;
+    proxy_set_header Connection "";
+    proxy_pass http://jnode; # 这里要和最上面 upstream 后的应用名一致，可以自定义
+  }
+}
+```
+
+测试配置文件有无问题：`nginx -t`,添加配置文件后重启服务：`service nginx reload`
+
+### PM2 一键部署
+在本地机器上敲一个命令就能够让整个服务更新、重启。  
+部署服务专门配置文件：`ecosystem.json`  
+（服务器输入）停止服务：`pm2 stop jnode`  
+（服务器输入）然后删除掉：`pm2 delete jnode`  
+（本地输入）跑脚本时不需要输入密码：`ssh-copy-id root@jokcy.me`  
+
+（服务器输入）设置环境：`pm2 deploy ecosystem.json production setup`  
+（服务器输入）然后再：`pm2 deploy ecosystem.json production`  
+（本地输入）如果更新了代码：`pm2 deploy ecosystem.json update`  
+
+## 进阶学习前端的重要内容
+培养自己的核心能力，基础知识概念，只有通晓整个网站开发的上线流程你才能知道你缺的是什么，需要学习什么。不断提升挑战，多看、多学、多做。
+### 基础
+HTML、CSS、JS 三驾马车  
+HTTP 协议  
+后端编程的基本概念  
+
+### 工具
+- npm
+- git
+- webpack
+
+### 类库和框架
+- jQuery、mootools 等 DOM 库，没有什么编程概念和编程范式
+- vue、react、angular 等前端框架，有各自的编程模型，
+- axios、loadsh 等工具库，
+
+### Nodejs
+- 前端工作流搭建
+- 接口代理
+- 服务端渲染

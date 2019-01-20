@@ -1,90 +1,180 @@
 import {
   observable,
-  toJs,
+  toJS,
   computed,
   action,
   extendObservable,
-} form 'mobx'
+} from 'mobx'
+import {
+  get,
+  post,
+} from '../util/http'
 
-import {topicSchema} from '../util/variable-define'
-import {get} from '../util/http'
+import {
+  topicSchema,
+} from '../util/variable-define'
 
-const createTopic = (topic) => {
-  return Object.assign({}, topicSchema, topic)
+const createTopic = (data) => {
+  return Object.assign({}, topicSchema, data)
 }
 
-class Topic {
+export class Topic {
   constructor(data) {
-    extendObservable(this, data) // 使其中的数据变成 mobx 的 reactive 的
+    extendObservable(this, data)
   }
+  @observable createdReplies = []
   @observable syncing = false
+
+  @action doReply(content) {
+    return new Promise((resolve, reject) => {
+      post(`/topic/${this.id}/replies`, {
+        content,
+      })
+        .then(data => {
+          debugger // eslint-disable-line
+          if (data.success) {
+            this.createdReplies.push({
+              create_at: Date.now(),
+              id: data.reply_id,
+              content,
+            })
+            resolve({
+              replyId: data.reply_id,
+              content,
+            })
+          } else {
+            reject()
+          }
+        }).catch(reject)
+    })
+  }
 }
 
-class TopicStore {
+export class TopicStore {
   @observable topics
-  @observable syncing
   @observable details
+  @observable createdTopics
+  @observable syncing = false
+  @observable tab = undefined
 
-  constructor({syncing = false, topics = [], details = []} = {}) {
+  constructor(
+    { syncing = false, topics = [], tab = null, details = [] } = {},
+  ) {
     this.syncing = syncing
-    this.topics = topics.map((topic) => new Topic(createTopic(topic)))
-    this.details = details.map((detail) => new Topic(createTopic(detail)))
-
+    this.topics = topics.map(topic => new Topic(createTopic(topic)))
+    this.details = details.map(detail => new Topic(createTopic(detail)))
+    this.tab = tab
   }
 
-  addTopic(topic) {
-    this.topics.push(new Topic(createTopic(topic)))
-  }
-
-  @computed get detailMap() {
-    return this.details.reduce((result, detail) => {
-      result[detail.id] = detail
+  @computed get topicMap() {
+    return this.topics.reduce((result, topic) => {
+      result[topic.id] = topic
       return result
     }, {})
   }
 
+  @computed get detailsMap() {
+    return this.details.reduce((result, topic) => {
+      result[topic.id] = topic
+      return result
+    }, {})
+  }
+
+  @action addTopic(topic) {
+    this.topics.push(new Topic(createTopic(topic)))
+  }
+
   @action fetchTopics(tab) {
     return new Promise((resolve, reject) => {
-      this.topics = []
-      this.syncing = trye
-      get('/topics', {
-        mdrender: false,
-        tab
-      }).then((resp) => {
-        if (resp.success) {
-          resp.data.forEach((topic) => {
-            this.addTopic(topic)
-          })
-          resolve()
-        } else {
-          reject()
-        }
-        this.syncing = false
-      }).catch((err) => {
-        reject(err)
-        this.syncing = false
-      })
+      if (tab === this.tab && this.topics.length > 0) {
+        resolve()
+      } else {
+        this.tab = tab
+        this.topics = []
+        this.syncing = true
+        get('/topics', {
+          mdrender: false,
+          tab,
+        }).then(resp => {
+          if (resp.success) {
+            const topics = resp.data.map(topic => {
+              return new Topic(createTopic(topic))
+            })
+            this.topics = topics
+            this.syncing = false
+            resolve()
+          } else {
+            this.syncing = false
+            reject()
+          }
+        }).catch(err => {
+          reject(err)
+        })
+      }
     })
   }
 
-  @action  getTopicDetail(id) {
+  @action createTopic(title, tab, content) {
     return new Promise((resolve, reject) => {
-      if (this.detailMap[id]) {
-        resolve(this.detailMap[id])
+      post('/topics', {
+        title, tab, content,
+      })
+        .then(data => {
+          if (data.success) {
+            const topic = {
+              title,
+              tab,
+              content,
+              id: data.topic_id,
+              create_at: Date.now(),
+            }
+            this.createdTopics.push(new Topic(createTopic(topic)))
+            resolve(topic)
+          } else {
+            reject(new Error(data.error_msg || '未知错误'))
+          }
+        })
+        .catch((err) => {
+          if (err.response) {
+            reject(new Error(err.response.data.error_msg || '未知错误'))
+          } else {
+            reject(new Error('未知错误'))
+          }
+        })
+    })
+  }
+
+  @action getTopicDetail(id) {
+    console.log('get topic id:', id) // eslint-disable-line
+    return new Promise((resolve, reject) => {
+      if (this.detailsMap[id]) {
+        resolve(this.detailsMap[id])
       } else {
         get(`/topic/${id}`, {
           mdrender: false,
-        }).then((resp) => {
+        }).then(resp => {
           if (resp.success) {
-            const topic = new Topic(createTopic(resp.data))
+            const topic = new Topic(createTopic(resp.data), true)
             this.details.push(topic)
             resolve(topic)
           } else {
             reject()
           }
-        }).catch(reject)
+        }).catch(err => {
+          reject(err)
+        })
       }
     })
+  }
+
+  toJson() {
+    return {
+      page: this.page,
+      topics: toJS(this.topics),
+      syncing: toJS(this.syncing),
+      details: toJS(this.details),
+      tab: this.tab,
+    }
   }
 }
 

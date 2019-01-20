@@ -35,7 +35,7 @@ export default class AppState {
 
   @action login(accessToken) {
     return new Promise((resolve, reject) => {
-      axios.post('/user/login', {}, {
+      axios.post('/api/user/login', {
         accessToken,
       }).then(resp => {
         if (resp.status === 200 && resp.data.success) {

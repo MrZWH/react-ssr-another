@@ -5,6 +5,7 @@ export const topicPrimaryStyle = (theme) => {
       alignItems: 'center',
     },
     title: {
+      textDecoration: 'none',
       color: '#555',
     },
     tab: {
@@ -15,20 +16,25 @@ export const topicPrimaryStyle = (theme) => {
       color: '#fff',
       borderRadius: 3,
       marginRight: 10,
-      fontSize: '12px'
+      fontSize: '12px',
+      flexShrink: 0,
+    },
+    good: {
+      backgroundColor: theme.palette.accent[600],
     },
     top: {
-      backgroundColor: theme.palette.accent[500],
+      backgroundColor: theme.palette.accent[200],
     },
   }
 }
 
-export const topicSecondaryStyles = (theme) => {
+export const topicSecondaryStyle = (theme) => {
   return {
     root: {
       display: 'flex',
       alignItems: 'center',
       paddingTop: 3,
+      flexWrap: 'wrap',
     },
     count: {
       textAlign: 'center',
@@ -39,9 +45,20 @@ export const topicSecondaryStyles = (theme) => {
       color: '#9e9e9e',
     },
     accentColor: {
-      color: theme.palette.accent[300],
+      color: theme.palette.accent[500],
     },
   }
 }
 
-export default topicPrimaryStyle
+export const topicListStyle = () => {
+  return {
+    root: {
+      margin: 24,
+      marginTop: 80,
+    },
+    loading: {
+      display: 'flex',
+      justifyContent: 'space-around',
+    },
+  }
+}

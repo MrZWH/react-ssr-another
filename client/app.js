@@ -1,27 +1,27 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {BrowserRouter} from 'react-router-dom'
-import {Provider} from 'mobx-react'
-import  {AppContainer} from 'react-hot-loader' // eslint-disable-line
-import {MuiThemeProvider, createMuiTheme} from 'material-ui/styles'
-import {lightBlue, pink} from 'material-ui/colors'
+import { Provider } from 'mobx-react'
+import { BrowserRouter } from 'react-router-dom'
+import { AppContainer } from 'react-hot-loader'  // eslint-disable-line
+
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
+import { lightBlue, pink } from 'material-ui/colors'
 
 import App from './views/App'
-import {AppState, TopicStore} from './store/store'
+import { AppState, TopicStore } from './store'
 
-// 设置 mater-ui 的主题色
+const initialState = window.__INITIAL_STATE__ || {} // eslint-disable-line
+
 const theme = createMuiTheme({
   palette: {
-    primary: lightBlue,
-    accent: pink,
-    type: 'light'
-  }
+    primary: pink,
+    accent: lightBlue,
+    type: 'light',
+  },
 })
 
-const initialState = window.__INITIAL__STATE__ || {} // eslint-disable-line
-
-const createApp = (TheApp) => {
-  class Main extends React.Component {
+const createClientApp = (TheApp) => {
+  class ClientApp extends React.Component {
     componentDidMount() {
       const jssStyles = document.getElementById('jss-server-side')
       if (jssStyles && jssStyles.parentNode) {
@@ -30,38 +30,40 @@ const createApp = (TheApp) => {
     }
 
     render() {
-      return <TheApp {...this.props}/>
+      return <TheApp />
     }
   }
 
-  return Main
+  return ClientApp
 }
 
-const appState = new AppState(initialState.appState)
+const appState = new AppState()
+appState.init(initialState.appState)
 const topicStore = new TopicStore(initialState.topicStore)
 
-const root = document.getElementById('root')
-
 const render = Component => {
-	ReactDOM.hydrate(
+  ReactDOM.render(
     <AppContainer>
-      <Provider appState={appState} topicStore={TopicStore}>
+      <Provider appState={appState} topicStore={topicStore}>
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
-            <Component/>
+            <Component />
           </MuiThemeProvider>
         </BrowserRouter>
       </Provider>
     </AppContainer>,
-    root
-	)
+    document.getElementById('root'),
+  )
 }
 
-render(createApp(App))
+render(createClientApp(App))
+
+// react 17 will replace render to hydrate when using ssr
+// ReactDOM.hydrate(<App />, document.getElementById('root'))
 
 if (module.hot) {
-	module.hot.accept('./views/App', () => {
-		const NextApp = require('./views/App').default // eslint-disable-line
-		render(createApp(NextApp))
-	})
+  module.hot.accept('./views/App', () => {
+    const NextApp = require('./views/App').default  // eslint-disable-line
+    render(createClientApp(NextApp))
+  })
 }

@@ -1,50 +1,49 @@
 const express = require('express')
-const favicon = require('serve-favicon')
-const bodyParser = require('body-parser')
-const serverRender = require('/util/server-render')
-const session = require('session')
+const app = express()
 const fs = require('fs')
 const path = require('path')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const favicon = require('serve-favicon')
+const serverRender = require('./util/server-render')
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const app = express()
-
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extends: false})) // 对应 http 请求里面 www-urlencoded 表单请求的不同方式，这个对应 formdata，这些配置方便我们使用 req.body 就能拿到数据
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(session({
   maxAge: 10 * 60 * 1000,
   name: 'tid',
   resave: false,
-  saveUnitialized: false,
-  secret: 'react cnode class'
+  saveUninitialized: false,
+  secret: 'I will teach you'
 }))
 
-app.use(favicon(path.join(__dirname, '../favicon.jco')))
+app.use('/api/user', require('./util/user-api'))
+app.use('/api', require('./util/inject-token'))
 
-app.use('/api/user', require('./util/handle-login'))
-app.use('/api', require('./util/proxy'))
+app.use(favicon(path.join(__dirname, '../favicon.ico')))
 
 if (!isDev) {
-	const serverEntry = require('../dist/server-entry')
-	const template = fs.readFileSync(path.join(__dirname, '../dist/server.ejs'), 'utf8')
-	// 需要为静态文件的请求做处理，不然 不论是请求 .js 哈市什么都会返回下面的设置的 html 内容
-	app.use('/public', express.static(path.join(__dirname, '../dist')))
-
-	app.get('*', function (req, res, next) {
+  app.use('/public', express.static(path.join(__dirname, '../dist')))
+  const serverEntry = require('../dist/server-entry')
+  const template = fs.readFileSync(path.join(__dirname, '../dist/server.ejs'), 'utf8')
+  app.get('*', function (req, res, next) {
     serverRender(serverEntry, template, req, res).catch(next)
-	})
+  })
 } else {
-	const devStatic = require('./util/dev-static')
-	devStatic(app)
+  const devStatic = require('./util/dev-static')
+  devStatic(app)
 }
 
 app.use(function (error, req, res, next) {
-  console.log(err)
-  res.status(500).send(error)
+  console.error(error)
 })
 
-app.listen(3333, function () {
-	console.log('server is listening on 3333')
+const host = process.env.HOST || '0.0.0.0'
+const port = process.env.PORT || 3333
+
+app.listen(port, host, function () {
+  console.log(`server is listening on ${host}:${port}`)
 })
